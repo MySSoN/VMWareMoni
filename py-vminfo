@@ -1,0 +1,38 @@
+#!/bin/bash
+#chkconfig: 2345 55 25
+# source function library
+. /etc/rc.d/init.d/functions
+
+script_name=py-vminfo_full.py
+
+#Set environement
+export TOOLS_HOME=/ebsmnt/python/vmmon
+
+
+start()
+{
+    $TOOLS_HOME/$script_name&
+}
+
+stop()
+{
+    kill $(ps ax | grep '/ebsmnt/python/vmmon/$script_name' | grep -v "grep"  | awk '{print $1}')
+}
+
+case "$1" in
+	start)
+		echo "Starting Get Metric VMWare."
+		start
+		;;
+	stop)
+		echo "Stopping  Get Metric VMWare."
+		stop
+		;;
+	*)
+		echo $"Usage: $script_name {start|stop}"
+		exit 1
+		;;
+esac
+
+
+
